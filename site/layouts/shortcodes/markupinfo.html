@@ -1,0 +1,13 @@
+<div class="markup-info-wrapper">
+  {{ if isset .Params "title" }}<h2>{{ index .Params "title" }}</h2>{{ end }}
+  <div class="markup-info-panel">
+    <div class="markup-info-element">
+      {{.Inner | safeHTML}}
+    </div>
+    <div class="markup-info-code">
+      <xmp>
+        {{.Inner | safeHTML}}
+      </xmp>
+    </div>
+  </div>
+</div>

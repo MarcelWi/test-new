@@ -1,3 +1,17 @@
 baseurl = "/"
 languageCode = "en-us"
 title = "Homepage"
+
+[params]
+  editURL = "https://github.com/matcornic/hugo-theme-learn/edit/master/exampleSite/content/"
+  description = "Documentation for Hugo Learn Theme"
+  author = "Mathieu Cornic"
+  showVisitedLinks = true
+  disableBreadcrumb = false
+  disableNextPrev = false
+
+[frontmatter]
+date = ["date", "publishDate", "lastmod"]
+lastmod = ["lastmod", ":fileModTime", ":default"]
+publishDate = ["publishDate", "date"]
+expiryDate = ["expiryDate"]

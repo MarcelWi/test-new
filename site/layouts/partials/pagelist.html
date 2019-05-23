@@ -1,0 +1,60 @@
+{{ $currentNode := . }}
+<h2>Übersicht des Styleguides</h2>
+<table>
+  {{range .Site.Home.Sections.ByWeight}}
+  {{ template "section-tree-table" dict "sect" . "currentnode" $currentNode}}
+  {{end}}
+</table>
+
+<!-- templates -->
+{{ define "section-tree-table" }}
+{{ $currentNode := .currentnode }}
+{{with .sect}}
+{{if .IsSection}}
+{{safeHTML .Params.head}}
+<tr class="page-categorie">
+  <td colspan="2">
+    <a href="{{.RelPermalink}}">{{safeHTML .Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{safeHTML .Params.Post}}</a>
+  </td>
+</tr>
+  {{ $numberOfPages := (add (len .Pages) (len .Sections)) }}
+  {{ if ne $numberOfPages 0 }}
+
+    {{ $currentNode.Scratch.Set "pages" .Pages }}
+    {{ if .Sections}}
+    {{ $currentNode.Scratch.Set "pages" (.Pages | union .Sections) }}
+    {{end}}
+    {{ $pages := ($currentNode.Scratch.Get "pages") }}
+
+    {{if eq .Site.Params.ordersectionsby "title"}}
+    {{ range $pages.ByTitle }}
+    {{ if and .Params.hidden (not $.showhidden) }}
+    {{else}}
+    {{ template "section-tree-table" dict "sect" . }}
+    {{end}}
+    {{ end }}
+    {{else}}
+    {{ range $pages.ByWeight }}
+    {{ if and .Params.hidden (not $.showhidden) }}
+    {{else}}
+    {{ template "section-tree-table" dict "sect" . }}
+    {{end}}
+    {{ end }}
+    {{end}}
+
+  {{ end }}
+
+{{else}}
+{{ if not .Params.Hidden }}
+<tr class="page-subcategorie">
+  <td>
+    <a href="{{ .RelPermalink}}">{{safeHTML .Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{safeHTML .Params.Post}}</a>
+  </td>
+  <td>
+    <i class="icon-status  {{ if .Params.status}}icon-status--{{.Params.status}}{{end}}"> </i>
+  </td>
+</tr>
+{{ end }}
+{{end}}
+{{ end }}
+{{ end }}

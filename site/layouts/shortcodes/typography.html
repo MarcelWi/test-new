@@ -1,0 +1,23 @@
+{{ $logo := .Site.Params.title }}
+
+<div class="row">
+{{ range $.Page.Params.colors }}
+<div class="column medium-4 color barmer-{{ .name }}" data-color="{{ .code }}">
+  <div class="swatch">
+    <span class="color-hint color-hint-copy">click to copy hexcode</span>
+    <span class="color-hint color-hint-success">copied!</span>
+  </div>
+  <div class="color-description-wrapper clearfix">
+    <strong class="color-title">{{ .name }}</strong>
+    <dl class="color-description">
+      <dt class="color-label">RGB:</dt>
+      <dd class="color-label color-label--dd color-label-rgb"></dd>
+      <dt class="color-label">HEX:</dt>
+      <dd class="color-label color-label--dd color-label-hex"></dd>
+      <dt class="color-label">HSL:</dt>
+      <dd class="color-label color-label--dd color-label-hsl"></dd>
+    </dl>
+  </div>
+</div>
+{{end}}
+</div>

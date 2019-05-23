@@ -1,6 +1,18 @@
 {{ define "main" }}
 
-{{ partial "jumbotron" (dict "imageUrl" "/img/7.jpg" "title" "This is where the heading goes" "subtitle" "This is where the subtitle goes") }}
-{{ .Content }}
+<div class="page-content">
+  <div class="page-content_head">
+    <h1>{{ .Title }}</h1>
+    {{ partial "status" . }}
+  </div>
+  <div class="page-content_middle">
+    {{ .Content }}
+  </div>
+  <div class="page-content_footer">
+    <p>Zuletzt bearbeitet: <time>{{ .Lastmod.Format "15:04 Uhr - 02 Jan 06" }}</time></p>
+  </div>
+</div>
+
+
 
 {{ end }}

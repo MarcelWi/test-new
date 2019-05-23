@@ -1,0 +1,66 @@
+<div class="page-sidebar">
+  <div class="page-sidebar_logo">
+    <a href="{{ .Site.BaseURL }}"><img alt="Barmer Logo" src="/img/barmer-logo.svg"></a>
+  </div>
+  <div class="page-sidebar_nav">
+    {{ $currentNode := . }}
+
+    <ul class="vertical menu accordion-menu" data-accordion-menu>
+      {{range .Site.Home.Sections.ByWeight}}
+        {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode}}
+      {{end}}
+    </ul>
+  </div>
+</div>
+
+<!-- templates -->
+{{ define "section-tree-nav" }}
+{{ $showvisitedlinks := .showvisitedlinks }}
+{{ $currentNode := .currentnode }}
+{{with .sect}}
+{{if .IsSection}}
+{{safeHTML .Params.head}}
+<li title="{{.Title}}" class="{{if .IsAncestor $currentNode }}is-active{{end}} {{if eq .UniqueID $currentNode.UniqueID}}is-active{{end}} {{if .Params.alwaysopen}}parent{{end}}" data-accordion-item  data-multi-open="true">
+  <a href="{{.RelPermalink}}">
+    {{safeHTML .Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{safeHTML .Params.Post}}
+  </a>
+  {{ $numberOfPages := (add (len .Pages) (len .Sections)) }}
+  {{ if ne $numberOfPages 0 }}
+  <ul class="menu vertical nested">
+    {{ $currentNode.Scratch.Set "pages" .Pages }}
+    {{ if .Sections}}
+    {{ $currentNode.Scratch.Set "pages" (.Pages | union .Sections) }}
+    {{end}}
+    {{ $pages := ($currentNode.Scratch.Get "pages") }}
+
+    {{if eq .Site.Params.ordersectionsby "title"}}
+    {{ range $pages.ByTitle }}
+    {{ if and .Params.hidden (not $.showhidden) }}
+    {{else}}
+    {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode }}
+    {{end}}
+    {{ end }}
+    {{else}}
+    {{ range $pages.ByWeight }}
+    {{ if and .Params.hidden (not $.showhidden) }}
+    {{else}}
+    {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode }}
+    {{end}}
+    {{ end }}
+    {{end}}
+  </ul>
+  {{ end }}
+</li>
+{{else}}
+{{ if not .Params.Hidden }}
+<li title="{{.Title}}" class="{{if eq .UniqueID $currentNode.UniqueID}}is-active{{end}}">
+  <a href="{{ .RelPermalink}}">
+    <i class="icon-status  {{ if .Params.status}}icon-status--{{.Params.status}}{{end}}"> </i>
+    {{safeHTML .Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{safeHTML .Params.Post}}
+  </a>
+</li>
+{{ end }}
+{{end}}
+{{ end }}
+{{ end }}
+

@@ -1,0 +1,2 @@
+<span class="page-content_status {{ if in .Params.status "0" }} page-content_status--wip  {{ else if in .Params.status "1" }} page-content_status--done {{ end }}">
+Status: {{ if in .Params.status "0" }} in Bearbeitung {{ else if in .Params.status "1" }} fertig {{else}} nicht vorhanden {{ end }}</span>
